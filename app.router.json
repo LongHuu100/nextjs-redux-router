@@ -1,0 +1,30 @@
+{
+    "name":[{
+        "pattern":"/",
+        "page":"index",
+        "is_auth_require":false,
+        "role": ["GUEST"]
+    }, {
+        "pattern":"/about",
+        "page":"about",
+        "is_auth_require":true,
+        "role": ["GUEST"]
+    }, {
+        "pattern":"/login",
+        "page":"login",
+        "is_auth_require":false,
+        "layout": "Auth",
+        "role": ["GUEST"]
+    }, {
+        "pattern":"/tintuc",
+        "page":"tintuc",
+        "is_auth_require":false,
+        "role": ["GUEST"]
+    }, {
+        "pattern":"/admin/page",
+        "page":"admin/page",
+        "is_auth_require":true,
+        "layout": "User",
+        "role": ["ADMIN"]
+    }]
+}
