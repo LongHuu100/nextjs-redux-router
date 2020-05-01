@@ -5,7 +5,7 @@ import { findRoute } from 'utils/routes.config'
 import { useDispatch, useSelector } from 'react-redux'
 import { notification } from 'antd';
 
-const Auth = (props) => {
+const Authority = (props) => {
 
     const [ layout, setLayout ] = useState('Main');
     const dispatch = useDispatch();
@@ -49,10 +49,7 @@ const Auth = (props) => {
             openNotificationWithIcon(message.type, message.data);
             dispatch({
                 type: CONFIG_MESSAGE,
-                payload: {
-                    type: 'success',
-                    data: null
-                }
+                payload: { type: 'success', data: null }
             })
         }
     }, [config.get('message')])

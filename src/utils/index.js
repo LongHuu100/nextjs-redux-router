@@ -9,3 +9,12 @@ export const findRoute = (routeName) => {
     });
     return route;
 }
+
+export const filterCateInList = (id, listCates) => {
+    const results = listCates.filter(f => {
+        return f.id === id;
+    })
+    if(results.length <= 0)
+        return '--'
+    return results[0].name
+}
