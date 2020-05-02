@@ -1,31 +1,25 @@
 import Document, { Head, Main, NextScript } from 'next/document'
-import { ServerStyleSheet } from 'styled-components'
 import Helmet from 'react-helmet'
 
 export default class extends Document {
 
     static async getInitialProps (ctx) {
-        const sheet = new ServerStyleSheet()
-        const originalRenderPage = ctx.renderPage
-        try {
-            ctx.renderPage = () =>
-                originalRenderPage({
-                    enhanceApp: App => props => sheet.collectStyles(<App {...props} />)
-                })
 
-            const documentProps = await Document.getInitialProps(ctx)
-            return {
-                ...documentProps,
-                helmet: Helmet.renderStatic(),
-                styles: (
-                    <>
-                        {documentProps.styles}
-                        {sheet.getStyleElement()}
-                    </>
-                )
-            }
-        } finally {
-            sheet.seal()
+        const originalRenderPage = ctx.renderPage
+        ctx.renderPage = () =>
+        originalRenderPage({
+            enhanceApp: App => props => <App {...props} />
+        })
+
+        const documentProps = await Document.getInitialProps(ctx)
+        return {
+            ...documentProps,
+            helmet: Helmet.renderStatic(),
+            styles: (
+                <>
+                    {documentProps.styles}
+                </>
+            )
         }
     }
 
@@ -44,13 +38,8 @@ export default class extends Document {
     }
 
     get helmetJsx () {
-        const title = 'Hello next.js Real World!'
         return (
-            <Helmet>
-                <title>{title}</title>
-                <meta name='viewport' content='width=device-width, initial-scale=1' />
-                <meta property='og:title' content={title} />
-            </Helmet>
+            <Helmet/>
         )
     }
 

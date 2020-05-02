@@ -1,4 +1,4 @@
-import { Row, Col, Input, Upload, Select, Form, Button, Checkbox } from 'antd'
+import { Row, Col, Input, Upload, Select, Form, Button } from 'antd'
 import { DeleteOutlined, EyeOutlined } from '@ant-design/icons';
 import CKEditor from "react-ckeditor-component";
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -13,14 +13,14 @@ const { Dragger } = Upload;
 const { Option } = Select;
 const sectionId = Math.floor(Date.now() / 1000);
 
-const TagForm =  props => {
+const FaqForm =  props => {
 
     const infoUploads = {
         sessionId: sectionId,
-        id: props.tags.id !== undefined ? props.tags.id: 0
+        id: props.faqs.id !== undefined ? props.faqs.id: 0
     };
 
-    const [tags] = useState(props.tags);
+    const [faqs] = useState(props.faqs);
     const [listImage, setListImage] = useState([]);
     const [form] = Form.useForm();
     const [content, setContent] = useState('');
@@ -29,10 +29,10 @@ const TagForm =  props => {
     const dispatch = useDispatch();
     const onFinish = values => {
         const data = {
-            ...values, id: tags.id,
+            ...values, id: faqs.id,
             content: content,
         }
-        post(props.mode == 'update' ? api.tags_update : api.tags_create + '?sectionId=' + infoUploads.sessionId, data).then(res => {
+        post(props.mode == 'update' ? api.faqs_update : api.faqs_create + '?sectionId=' + infoUploads.sessionId, data).then(res => {
             if(res.errorCode === SUCCESS) {
                 dispatch(message({type:'success', message: res.message}))
             }
@@ -47,10 +47,10 @@ const TagForm =  props => {
     })
 
     useEffect(() => {
-        form.setFieldsValue(tags);
-        setContent(tags.content);
+        form.setFieldsValue(faqs);
+        setContent(faqs.content);
         if(props.mode == 'update') {
-            setListImage(props.tags.tagsImage)
+            setListImage(faqs.tagsImage != null ? faqs.tagsImage : [])
         }
         fetch(api.page_mix_cate).then(res => {
             if(res.errorCode === SUCCESS) {
@@ -134,11 +134,6 @@ const TagForm =  props => {
         <Form form={form} name="horizontal_login" layout="vertical" onFinish={onFinish}>
             <Row justify="space-around">
                 <Col style={{ padding: 8 }} span={10}>
-                    <Form.Item
-                        name="title"
-                        rules={[{ required: true, message: 'Vui lòng nhập tiêu đề!' }]} >
-                        <Input placeholder="Tiêu đề" />
-                    </Form.Item>
                     <Form.Item name="name"
                                rules={[{ required: true, message: 'Vui lòng nhập tên!' }]} >
                         <Input placeholder="Tên bài viết" />
@@ -181,9 +176,9 @@ const TagForm =  props => {
     </>
 }
 
-TagForm.defaultProps = {
-    tags: {},
+FaqForm.defaultProps = {
+    faqs: {},
     mode: 'create'
 }
 
-export default TagForm;
+export default FaqForm;

@@ -1,6 +1,7 @@
 import Helmet from 'react-helmet'
 
-export default props => {
+const About =  props => {
+
     return (
         <>
             <Helmet>
@@ -11,3 +12,5 @@ export default props => {
         </>
     )
 }
+
+ export default About;

@@ -1,42 +1,44 @@
 import Helmet from 'react-helmet'
 import { Row, Breadcrumb } from 'antd'
-import PageForm from 'containers/page/page-form'
+import TagsForm from 'containers/tags.form'
 import { fetch } from 'libs/request'
 import { api, SUCCESS } from 'config'
 import Link from 'next/link'
 
-const AdminPageUpdate =  props => {
+const AdminTagsUpdate =  props => {
 
     return (
         <>
             <Helmet>
-                <title>Sửa bài viết tin tức</title>
+                <title>Sửa bài viết tags</title>
             </Helmet>
             <Row style={{ padding: 8 }} justify="start">
                 <Breadcrumb>
                     <Breadcrumb.Item>Trang quản trị</Breadcrumb.Item>
                     <Breadcrumb.Item>
-                        <Link href="/admin/page"><a>Tin tức</a></Link>
+                        <Link href="/admin/tags"><a>Tags</a></Link>
                     </Breadcrumb.Item>
                     <Breadcrumb.Item>
-                        Tạo mới
+                        {props.pageProps.data.name}
                     </Breadcrumb.Item>
                 </Breadcrumb>
             </Row>
-            <PageForm page={props.pageProps.data} mode="update" />
+            <TagsForm tags={props.pageProps.data} mode="update" />
         </>
     )
 }
 
-AdminPageUpdate.getInitialProps = async ({store, query}) => {
-    const data = await fetch(api.page_view, {slug: query.slug}).then(res => {
+AdminTagsUpdate.getInitialProps = async ({store, query}) => {
+    const data = await fetch(api.tags_view, {id: query.id}).then(res => {
         if(res.errorCode == SUCCESS) {
             return res.data;
         } else {
             return {};
         }
+    }).catch( ex => {
+        console.error('[pages.admin.AdminTagsUpdate]:', ex.message)
     })
     return { data: data }
 }
 
-export default AdminPageUpdate;
+export default AdminTagsUpdate;

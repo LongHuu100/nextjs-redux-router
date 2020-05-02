@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/nextjs-redux.iml" filepath="$PROJECT_DIR$/.idea/nextjs-redux.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../printgo_crm/.idea/printgo_crm.iml" filepath="$PROJECT_DIR$/../printgo_crm/.idea/printgo_crm.iml" />
     </modules>
   </component>
 </project>

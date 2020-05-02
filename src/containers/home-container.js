@@ -1,7 +1,14 @@
 import React from 'react'
+import Helmet from 'react-helmet'
 
 const HomeContainer = (props) => {
+    const title = 'm2viet chia sẽ thông tin mới nhất về mobile monney'
     return <>
+        <Helmet>
+            <title>{title}</title>
+            <meta name='viewport' content='width=device-width, initial-scale=1' />
+            <meta property='og:title' content={title} />
+        </Helmet>
         <div id="home" className="home">
             <div className="container">
                 <div className="row">
@@ -138,42 +145,6 @@ const HomeContainer = (props) => {
                     </div>
                     <div className="col-sm-6 text-right">
                         <img src="/images/idea.png" alt="idea" className="img-fluid" />
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div className="contactus" id="contact">
-            <div className="container">
-                <div className="row mb-5 pb-5">
-                    <div className="col-sm-5">
-                        <img src="/images/contact.jpg" alt="contact" className="img-fluid" />
-                    </div>
-                    <div className="col-sm-7">
-                        <h3 className="font-weight-medium text-dark mt-5 mt-lg-0">Got A Problem</h3>
-                        <h5 className="text-dark mb-5">Lorem ipsum dolor sit amet, consectetur pretium</h5>
-                        <form>
-                            <div className="row">
-                                <div className="col-sm-6">
-                                    <div className="form-group">
-                                        <input type="text" className="form-control" id="name" placeholder="Name*"/>
-                                    </div>
-                                </div>
-                                <div className="col-sm-6">
-                                    <div className="form-group">
-                                        <input type="email" className="form-control" id="mail" placeholder="Email*"/>
-                                    </div>
-                                </div>
-                                <div className="col-sm-12">
-                                    <div className="form-group">
-                                        <textarea name="message" id="message" className="form-control"
-                                                  placeholder="Message*" rows="5" />
-                                    </div>
-                                </div>
-                                <div className="col-sm-12">
-                                    <a href="#" className="btn btn-secondary">SEND</a>
-                                </div>
-                            </div>
-                        </form>
                     </div>
                 </div>
             </div>

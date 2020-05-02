@@ -24,7 +24,7 @@ app.prepare().then(() => {
         immutable: true
     }))
 
-    server.get("/tintuc/:slug", (req, res) => {
+    server.get("/:cate/:slug-i:id", (req, res) => {
         return app.render(req, res, "/tintuc", { slug: req.params.slug })
     })
 

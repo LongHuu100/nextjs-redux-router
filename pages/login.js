@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Button, Form, Input } from "antd";
 import { login } from 'actions/config';
 import { useDispatch } from 'react-redux'
+import Helmet from 'react-helmet'
 
 const LoginFormImpl = (props) => {
 
@@ -24,7 +25,11 @@ const LoginFormImpl = (props) => {
         });
     }, []);
 
-    return (
+    return <>
+        <Helmet>
+            <meta name="description" content="M2Viet Login ..."/>
+            <title>M2Viet Login ...</title>
+        </Helmet>
         <div className="login__zone">
             <div className="logo__log">
                 <img src="/static/logo.png"/>
@@ -46,7 +51,7 @@ const LoginFormImpl = (props) => {
                 </Form>
             </div>
         </div>
-    );
+    </>;
 };
 
 export default LoginFormImpl;

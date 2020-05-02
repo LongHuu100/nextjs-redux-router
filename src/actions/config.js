@@ -1,9 +1,9 @@
 import { post } from 'libs/request'
 import { api } from 'config'
 
-export const CONFIG_ROUTE = Symbol('CONFIG_ROUTE')
-export const CONFIG_USER = Symbol('CONFIG_USER')
-export const CONFIG_MESSAGE = Symbol('CONFIG_MESSAGE')
+export const CONFIG_ROUTE = 'CONFIG_ROUTE'
+export const CONFIG_USER = 'CONFIG_USER'
+export const CONFIG_MESSAGE = 'CONFIG_MESSAGE'
 
 export function configRoute (route) {
     return dispatch => {
@@ -20,7 +20,6 @@ export function login (data) {
             console.log('login res -> ', res)
             configUser(res.data)
         }).catch(er => {
-            console.log('login er -> ', er)
             dispatch({
                 type: CONFIG_MESSAGE,
                 payload: {
@@ -28,6 +27,18 @@ export function login (data) {
                     data: er.toString()
                 }
             })
+        })
+    }
+}
+
+export function message (data) {
+    return dispatch => {
+        dispatch({
+            type: CONFIG_MESSAGE,
+            payload: {
+                type: data.type,
+                data: data.message
+            }
         })
     }
 }

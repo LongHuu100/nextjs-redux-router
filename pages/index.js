@@ -1,3 +1,3 @@
-import SearchRepoContainer from 'containers/SearchRepoContainer'
+import HomeContainer from 'containers/home-container'
 
-export default SearchRepoContainer
+export default HomeContainer

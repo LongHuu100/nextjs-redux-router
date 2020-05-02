@@ -7,19 +7,11 @@ import { DeleteOutlined, EditTwoTone } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react'
 import { fetch, post } from 'libs/request'
 import { api, SUCCESS } from 'config'
+import { filterCateInList } from 'utils'
 import Link from 'next/link'
 const { Option } = Select;
 
-const filterCateInList = (id, listCates) => {
-    const results = listCates.filter(f => {
-        return f.id === id;
-    })
-    if(results.length <= 0)
-        return '--'
-    return results[0].name
-}
-
-const AdminTags = props => {
+const AdminFaqs = props => {
 
     const [form] = Form.useForm();
     const [filter, setFilter] = useState({});
@@ -36,12 +28,6 @@ const AdminTags = props => {
             dataIndex: 'name',
             key: 'name',
             render: text => <a>{text}</a>,
-        },
-        {
-            title: 'Tiêu đề',
-            dataIndex: 'title',
-            key: 'title',
-            width: 300
         },
         {
             title: 'Danh mục',
@@ -71,7 +57,7 @@ const AdminTags = props => {
             key: 'action',
             render: (text, record) => {
                 return <span>
-                    <Link href={`/admin/tags.update?id=${record.id}`}><a style={{ marginRight: 16 }}><EditTwoTone/></a></Link>
+                    <Link href={`/admin/faqs.update?id=${record.id}`}><a style={{ marginRight: 16 }}><EditTwoTone/></a></Link>
                     <Popconfirm title="Sure to delete?" onConfirm={() => {}}>
                         <a><DeleteOutlined/></a>
                     </Popconfirm>
@@ -82,21 +68,21 @@ const AdminTags = props => {
 
     useEffect(() => {
         ( async () => {
-            let listInsideTags = null;
+            let listInsideFaqs = null;
             if(catagorys == null) {
                 const cates = await fetch(api.page_mix_cate);
                 if(cates.errorCode === SUCCESS) {
                     setCatagorys(cates.data);
-                    listInsideTags = cates.data;
+                    listInsideFaqs = cates.data;
                 }
             } else {
-                listInsideTags = catagorys;
+                listInsideFaqs = catagorys;
             }
-            const listTags = await post(api.tags_list, filter);
-            if(listTags.errorCode === SUCCESS){
-                let datas = listTags.data.embedded;
+            const listFaqs = await post(api.faqs_list, filter);
+            if(listFaqs.errorCode === SUCCESS){
+                let datas = listFaqs.data.embedded;
                 datas.map(it => {
-                    it.category = listInsideTags === null ? '--' : filterCateInList(it.categoryId, listInsideTags)
+                    it.category = listInsideFaqs === null ? '--' : filterCateInList(it.categoryId, listInsideFaqs)
                     return it;
                 })
                 setData(datas);
@@ -107,16 +93,16 @@ const AdminTags = props => {
     return (
         <>
             <Helmet>
-                <title>Quản lý tags</title>
+                <title>Quản lý faqs</title>
             </Helmet>
             <Row style={{ padding: 8 }} justify="start">
                 <Breadcrumb>
                     <Breadcrumb.Item>Trang quản trị</Breadcrumb.Item>
                     <Breadcrumb.Item>
-                        <Link href="/admin/tags"><a>Tags</a></Link>
+                        <Link href="/admin/tags"><a>Faqs</a></Link>
                     </Breadcrumb.Item>
                     <Breadcrumb.Item>
-                        danh sách tags
+                        danh sách faqs
                     </Breadcrumb.Item>
                 </Breadcrumb>
             </Row>
@@ -134,7 +120,7 @@ const AdminTags = props => {
                     <Form.Item>
                         <Button type="primary" htmlType="submit"> Tìm kiếm </Button>
                     </Form.Item>
-                    <Button type="success"><Link href="/admin/tags.create"><a>Tạo mới</a></Link></Button>
+                    <Button type="success"><Link href="/admin/faqs.create"><a>Tạo mới</a></Link></Button>
                 </Form>
                 <Table rowKey="id" style={{ width: '100%' }} columns={columns} dataSource={data} />
             </Row>
@@ -142,4 +128,4 @@ const AdminTags = props => {
     )
 }
 
-export default AdminTags;
+export default AdminFaqs;

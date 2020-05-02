@@ -1,6 +1,6 @@
 import Helmet from 'react-helmet'
 import { Row, Breadcrumb } from 'antd'
-import PageForm from 'containers/page/page-form'
+import TagsForm from 'containers/tags.form'
 import Link from 'next/link'
 
 const AdminPageCreate =  props => {
@@ -14,14 +14,14 @@ const AdminPageCreate =  props => {
                 <Breadcrumb>
                     <Breadcrumb.Item>Trang quản trị</Breadcrumb.Item>
                     <Breadcrumb.Item>
-                        <Link href="/admin/page">Tin tức</Link>
+                        <Link href="/admin/tags">Tags</Link>
                     </Breadcrumb.Item>
                     <Breadcrumb.Item>
                         Tạo mới
                     </Breadcrumb.Item>
                 </Breadcrumb>
             </Row>
-            <PageForm mode="create" />
+            <TagsForm mode="create" />
         </>
     )
 }

@@ -8,15 +8,20 @@ const createParams = (param) => {
         if (str != "") {
             str += "&";
         }
-        str += key + "=" + encodeURIComponent(obj[key]);
+        str += key + "=" + encodeURIComponent(param[key]);
     }
+    return str;
 }
 
-export const get = (api, page = 0, filter= null) => {
-    const path = `${config.gateway}/${api}?page=${page}` + (filter !== null ? createParams(filter) : '');
+export const getList = (api, page = 0, filter= null) => {
+    const path = `${config.gateway}/${api}?page=${page}&` + (filter !== null ? createParams(filter) : '');
     return axios.get(path).then(res => {
         return humps.camelizeKeys(res.data)
     })
+}
+
+export const fetch = (api, filter= null) => {
+    return getList(api, 0, filter)
 }
 
 export const post = (api, input) => {

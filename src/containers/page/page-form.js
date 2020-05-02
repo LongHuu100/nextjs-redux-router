@@ -1,10 +1,10 @@
-import { Row, Col, Input, Upload, Checkbox, Select, Spin, Form, Button } from 'antd';
+import { Row, Col, Input, Upload, Checkbox, Select, Form, Button } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import CKEditor from "react-ckeditor-component";
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { InboxOutlined } from '@ant-design/icons'
 import { fetch, post } from 'libs/request'
-import { api, SUCCESS } from 'config'
+import { gateway, api, SUCCESS } from 'config'
 import { useDispatch } from 'react-redux'
 import { message } from 'actions/config'
 import axios from 'axios'
@@ -12,6 +12,16 @@ import axios from 'axios'
 import Tags from './tags'
 const { Dragger } = Upload;
 const { Option } = Select;
+
+const getIdOfTags = (listTags) => {
+    if(listTags.length <= 0)
+        return null;
+    let ids = [];
+    listTags.map(it => {
+        ids.push( parseInt(it.value) )
+    });
+    return JSON.stringify(ids);
+}
 
 const PageForm =  props => {
 
@@ -22,13 +32,18 @@ const PageForm =  props => {
 
     const [page] = useState(props.page);
     const [listImage, setListImage] = useState([]);
+    const [listTags, setListTags] = useState([]);
     const [form] = Form.useForm();
     const [content, setContent] = useState('');
     const [listCategory, setListCategory] = useState('');
 
     const dispatch = useDispatch();
     const onFinish = values => {
-        const data = {...values, id: page.id, content: content}
+        const data = {
+            ...values, id: page.id,
+            content: content,
+            tags: getIdOfTags(listTags)
+        }
         post(props.mode == 'update' ? api.page_update : api.page_create, data).then(res => {
             if(res.errorCode === SUCCESS) {
                 dispatch(message({type:'success', message: res.message}))
@@ -42,6 +57,10 @@ const PageForm =  props => {
         var newContent = evt.editor.getData();
         setContent(newContent);
     })
+
+    useEffect(() => {
+        console.log('listTags -->', listTags)
+    }, [listTags]);
 
     useEffect(() => {
         form.setFieldsValue(page);
@@ -83,7 +102,7 @@ const PageForm =  props => {
                 dispatch(message({type:'error', message: `${err.message} file upload failed.`}))
             })
         },
-        action: process.env.GATEWAY + '/page/uploads?sessionId=' + infoUploads.sessionId + '&id=' + infoUploads.id
+        action: gateway + '/page/uploads?sessionId=' + infoUploads.sessionId + '&id=' + infoUploads.id
     };
 
     const removeImage = useCallback( (image) => {
@@ -178,7 +197,11 @@ const PageForm =  props => {
                             {listCategory}
                         </Select>
                     </Form.Item>
-                    <Tags />
+                    <Tags
+                        urlFetch={`${gateway}/${api.page_mix_tag}`}
+                        setListTags={setListTags}
+                        data={page.listTags}
+                        value={page.tags != null ? JSON.parse(page.tags) : []} />
                     <Form.Item>
                         <Dragger {...propsUploads} >
                             <p className="ant-upload-drag-icon">

@@ -4,12 +4,12 @@ const {Content} = Layout;
 
 export default class LayoutAuth extends PureComponent {
     render () {
-        return (
+        return <>
             <Layout>
                 <Content>
                     {this.props.children}
                 </Content>
             </Layout>
-        );
+        </>;
     }
 }

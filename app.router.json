@@ -23,8 +23,62 @@
     }, {
         "pattern":"/admin/page",
         "page":"admin/page",
-        "is_auth_require":true,
-        "layout": "User",
+        "is_auth_require":false,
+        "layout": "Admin",
+        "role": ["ADMIN"]
+    }, {
+        "pattern":"/admin/page.create",
+        "page":"admin/page.create",
+        "is_auth_require":false,
+        "layout": "Admin",
+        "role": ["ADMIN"]
+    }, {
+        "pattern":"/admin/page.update",
+        "page":"admin/page.update",
+        "is_auth_require":false,
+        "layout": "Admin",
+        "role": ["ADMIN"]
+    },{
+        "pattern":"/admin/tags",
+        "page":"admin/tags",
+        "is_auth_require":false,
+        "layout": "Admin",
+        "role": ["ADMIN"]
+    },{
+        "pattern":"/admin/tags.update",
+        "page":"admin/tags.update",
+        "is_auth_require":false,
+        "layout": "Admin",
+        "role": ["ADMIN"]
+    }, {
+        "pattern":"/admin/tags.create",
+        "page":"admin/tags.create",
+        "is_auth_require":false,
+        "layout": "Admin",
+        "role": ["ADMIN"]
+    }, {
+        "pattern":"/admin/faqs",
+        "page":"admin/faqs",
+        "is_auth_require":false,
+        "layout": "Admin",
+        "role": ["ADMIN"]
+    },{
+        "pattern":"/admin/faqs.update",
+        "page":"admin/faqs.update",
+        "is_auth_require":false,
+        "layout": "Admin",
+        "role": ["ADMIN"]
+    }, {
+        "pattern":"/admin/faqs.create",
+        "page":"admin/faqs.create",
+        "is_auth_require":false,
+        "layout": "Admin",
+        "role": ["ADMIN"]
+    }, {
+        "pattern":"/admin/page.category",
+        "page":"admin/page.category",
+        "is_auth_require":false,
+        "layout": "Admin",
         "role": ["ADMIN"]
     }]
 }

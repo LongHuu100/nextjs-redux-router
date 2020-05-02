@@ -1,28 +1,42 @@
 import Helmet from 'react-helmet'
 import { Row, Breadcrumb } from 'antd'
-import PageForm from 'containers/page-form'
+import PageForm from 'containers/page/page-form'
+import { fetch } from 'libs/request'
+import { api, SUCCESS } from 'config'
+import Link from 'next/link'
 
-const AdminPageCreate =  props => {
+const AdminPageUpdate =  props => {
 
     return (
         <>
             <Helmet>
-                <title>Quản lý tin tức</title>
+                <title>Sửa bài viết tin tức</title>
             </Helmet>
             <Row style={{ padding: 8 }} justify="start">
                 <Breadcrumb>
                     <Breadcrumb.Item>Trang quản trị</Breadcrumb.Item>
                     <Breadcrumb.Item>
-                        <a href="">Tin tức</a>
+                        <Link href="/admin/page"><a>Tin tức</a></Link>
                     </Breadcrumb.Item>
                     <Breadcrumb.Item>
                         Tạo mới
                     </Breadcrumb.Item>
                 </Breadcrumb>
             </Row>
-            <PageForm />
+            <PageForm page={props.pageProps.data} mode="update" />
         </>
     )
 }
 
-export default AdminPageCreate;
+AdminPageUpdate.getInitialProps = async ({store, query}) => {
+    const data = await fetch(api.page_view, {slug: query.slug}).then(res => {
+        if(res.errorCode == SUCCESS) {
+            return res.data;
+        } else {
+            return {};
+        }
+    })
+    return { data: data }
+}
+
+export default AdminPageUpdate;

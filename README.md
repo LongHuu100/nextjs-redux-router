@@ -19,5 +19,11 @@ After `npm run build` finished, run
 ```
 yarn serve
 ```
+<Link href='/'>
+    <a>Redux demo</a>
+</Link>
+<Link href="/tintuc?slug=bao-mat-khi-su-dung" as="/mobile-money/bao-mat-khi-su-dung-p10">
+    <a>Tin Tuc</a>
+</Link>
 
 If you prefer using `now`, just modify `now.json` config.
