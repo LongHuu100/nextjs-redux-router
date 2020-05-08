@@ -10,7 +10,7 @@ import { api, SUCCESS } from 'config'
 import Link from 'next/link'
 const { Option } = Select;
 
-const AdminPage = props => {
+const AdminProduct = props => {
 
     const [form] = Form.useForm();
     const [filter, setFilter] = useState({});
@@ -22,7 +22,7 @@ const AdminPage = props => {
     };
 
     useEffect(() => {
-        post(api.page_list, filter).then(res => {
+        post(api.product_list, filter).then(res => {
             if(res.errorCode === SUCCESS){
                 setData(res.data.embedded)
             }
@@ -32,16 +32,16 @@ const AdminPage = props => {
     return (
         <>
             <Helmet>
-                <title>Quản lý tin tức</title>
+                <title>Quản lý sản phẩm</title>
             </Helmet>
             <Row style={{ padding: 8 }} justify="start">
                 <Breadcrumb>
                     <Breadcrumb.Item>Trang quản trị</Breadcrumb.Item>
                     <Breadcrumb.Item>
-                        <Link href="/admin/page"><a>Tin tức</a></Link>
+                        <Link href="/admin/product"><a>Sản phẩm</a></Link>
                     </Breadcrumb.Item>
                     <Breadcrumb.Item>
-                        danh sách tin
+                        danh sách sản phẩm
                     </Breadcrumb.Item>
                 </Breadcrumb>
             </Row>
@@ -59,6 +59,7 @@ const AdminPage = props => {
                     <Form.Item>
                         <Button type="primary" htmlType="submit"> Tìm kiếm </Button>
                     </Form.Item>
+                    <Button type="success"><Link href="/admin/product.form?mode=create&id=0"><a>Tạo mới</a></Link></Button>
                 </Form>
                 <Table rowKey="id" style={{ width: '100%' }} columns={columns} dataSource={data} />
             </Row>
@@ -106,7 +107,7 @@ const columns = [
         title: 'Thao tác',
         key: 'action',
         render: (text, record) => {
-            let linkEdit = "/admin/page.update?slug=" + record.slug;
+            let linkEdit = "/admin/product.form?mode=edit&id=" + record.id;
             return <span>
                 <Link href={linkEdit}>
                     <a style={{ marginRight: 16 }}><EditTwoTone/></a>
@@ -117,4 +118,4 @@ const columns = [
     }
 ];
 
-export default AdminPage;
+export default AdminProduct;

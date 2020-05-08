@@ -80,5 +80,29 @@
         "is_auth_require":false,
         "layout": "Admin",
         "role": ["ADMIN"]
+    }, {
+        "pattern":"/admin/product.category",
+        "page":"admin/product.category",
+        "is_auth_require":false,
+        "layout": "Admin",
+        "role": ["ADMIN"]
+    }, {
+        "pattern":"/admin/product",
+        "page":"admin/product",
+        "is_auth_require":false,
+        "layout": "Admin",
+        "role": ["ADMIN"]
+    }, {
+        "pattern":"/admin/product.form",
+        "page":"admin/product.form",
+        "is_auth_require":false,
+        "layout": "Admin",
+        "role": ["ADMIN"]
+    }, {
+        "pattern":"/admin/block.home",
+        "page":"admin/block.home",
+        "is_auth_require":false,
+        "layout": "Admin",
+        "role": ["ADMIN"]
     }]
 }

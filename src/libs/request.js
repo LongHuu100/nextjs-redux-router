@@ -24,6 +24,21 @@ export const fetch = (api, filter= null) => {
     return getList(api, 0, filter)
 }
 
+function isEmpty(obj) {
+    return Object.keys(obj).length === 0;
+}
+
+export const search = (api, filter= null, page = 0, model = 'model') => {
+    var queryString = null;
+    if(isEmpty(filter) === false) {
+        queryString = Object.keys(filter).map(key => model + '[' + key + ']' + '=' + filter[key]).join('&');
+    }
+    const path = `${config.gateway}/${api}?page=${page}` + ( queryString !== null ? '&' + queryString : '' );
+    return axios.get(path).then(res => {
+        return humps.camelizeKeys(res.data)
+    })
+}
+
 export const post = (api, input) => {
     const path = `${config.gateway}/${api}`;
     return axios.post(path, input).then(res => {

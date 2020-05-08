@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Button, Form, Input } from "antd";
 import { login } from 'actions/config';
 import { useDispatch } from 'react-redux'
-import Helmet from 'react-helmet'
+import { Helmet } from 'react-helmet'
 
 const LoginFormImpl = (props) => {
 

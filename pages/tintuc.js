@@ -1,4 +1,4 @@
-import Helmet from 'react-helmet'
+import { Helmet } from 'react-helmet'
 import {RightOutlined} from '@ant-design/icons'
 import { useState } from 'react'
 import { fetch } from 'libs/request'

@@ -1,4 +1,4 @@
-import Helmet from 'react-helmet'
+import { Helmet } from 'react-helmet'
 import { Row, Breadcrumb } from 'antd'
 import FaqsForm from 'containers/faqs.form'
 import { fetch } from 'libs/request'

@@ -7842,11 +7842,11 @@ h6, .h6 {
 
 .footer {
   color: #e5e5e5;
-  background: #3c37f1 url(../../../images/footer_bg.svg);
+  background: #3c37f1 url('/images/footer_bg.svg');
   background-size: cover;
   background-position: left bottom;
 }
-
+banner
 .footer p {
   margin-bottom: 0.25rem;
 }
@@ -8098,7 +8098,7 @@ h6, .h6 {
 }
 
 .home {
-  background: url("../../../images/banner-bg.svg");
+  background: url('/images/banner-bg.svg');
   background-repeat-y: no-repeat;
   background-position: 0 -50px;
   padding-top: 103px;

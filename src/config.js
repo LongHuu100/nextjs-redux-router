@@ -23,6 +23,17 @@ export const api = {
     page_cate_update: 'page-category/update',
     page_cate_create: 'page-category/create',
     page_cate_delete: 'page-category/delete',
+    product_cate_view: 'product-category/view',
+    product_cate_update: 'product-category/update',
+    product_cate_create: 'product-category/create',
+    product_cate_delete: 'product-category/delete',
+    product_cate_list: 'product-category/list',
+    product_list: 'product/list',
+    product_update: 'product/update',
+    product_create: 'product/create',
+    product_view: 'product/view',
+    product_slider_represent: 'product/slider-represent',
+    block_home: 'block-home'
 }
 
 export const SUCCESS = 200

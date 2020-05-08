@@ -7,20 +7,19 @@ import { DeleteOutlined, EditTwoTone } from '@ant-design/icons';
 import React, { useCallback, useEffect, useState } from 'react'
 import { fetch, post } from 'libs/request'
 import { api, SUCCESS } from 'config'
-import PageCategoryForm from 'containers/page-category.form'
+import ProductCategoryForm from 'containers/products/product-category.form'
 import { useDispatch, useSelector } from 'react-redux'
-import { message, listCategory } from 'actions'
-
+import { message, listProductCategory } from 'actions'
 const { Option } = Select;
 
-const AdminPageCategory = props => {
+const AdminProductCategory = props => {
 
     const dispatch = useDispatch();
     const { repos } = useSelector(state => state)
     const [form] = Form.useForm();
     const [filter, setFilter] = useState({});
     const [data, setData] = useState([]);
-    const [pageCategory, setPageCategory] = useState({});
+    const [productCategory, setProductCategory] = useState({});
     const [openModel, setOpenModel] = useState(false);
 
     const onFinish = values => {
@@ -28,12 +27,12 @@ const AdminPageCategory = props => {
     };
 
     useEffect( () => {
-        const listData = repos.get('listCategory').toJS();
+        const listData = repos.get('productCategory').toJS();
         setData(listData)
-    }, [repos])
+    }, [repos.get('productCategory')])
 
     useEffect(() => {
-        post(api.page_cate_list, filter).then(res => {
+        post(api.product_cate_list, filter).then(res => {
             if(res.errorCode === SUCCESS){
                 setData(res.data)
             }
@@ -41,9 +40,9 @@ const AdminPageCategory = props => {
     }, [filter])
 
     const deleteCallback = useCallback((id) => {
-        fetch(api.page_cate_delete, {id:id}).then(res => {
+        fetch(api.product_cate_delete, {id:id}).then(res => {
             if(res.errorCode === SUCCESS){
-                dispatch(listCategory())
+                dispatch(listProductCategory())
                 dispatch(message({type:'success', message: res.message}))
             }
         }).catch(ex => {
@@ -87,7 +86,7 @@ const AdminPageCategory = props => {
             render: (text, record) => {
                 return <span>
                 <a onClick={ async ()=> {
-                    await setPageCategory(record)
+                    await setProductCategory(record)
                     setOpenModel(true)
                 }} style={{ marginRight: 16 }}><EditTwoTone/></a>
                 <Popconfirm title="Xóa danh mục sẽ xóa tất cả danh mục con ?" onConfirm={() => {deleteCallback(record.id)}}>
@@ -101,13 +100,13 @@ const AdminPageCategory = props => {
     return (
         <>
             <Helmet>
-                <title>Quản lý danh mục</title>
+                <title>Danh mục sản phẩm</title>
             </Helmet>
             <Row style={{ padding: 8 }} justify="start">
                 <Breadcrumb>
                     <Breadcrumb.Item>Trang quản trị</Breadcrumb.Item>
                     <Breadcrumb.Item>
-                        danh sách danh mục tin tức
+                        danh sách danh mục sản phẩm
                     </Breadcrumb.Item>
                 </Breadcrumb>
             </Row>
@@ -126,24 +125,25 @@ const AdminPageCategory = props => {
                         <Button type="primary" htmlType="submit"> Tìm kiếm </Button>
                     </Form.Item>
                     <Button onClick={ async ()=> {
-                        await setPageCategory({})
+                        await setProductCategory({})
                         setOpenModel(true)
                     }} type="success">Tạo mới</Button>
                 </Form>
                 <Table rowKey="id" style={{ width: '100%' }} columns={columns} dataSource={data} />
             </Row>
-            <PageCategoryForm
-                getCategory={() => {dispatch(listCategory())}}
+            <ProductCategoryForm
+                getCategory={() => {dispatch(listProductCategory())}}
                 listCategory={data}
-                pageCategory={pageCategory}
-                visible={openModel} setVisible={setOpenModel} />
+                productCategory={productCategory}
+                visible={openModel}
+                setVisible={setOpenModel} />
         </>
     )
 }
 
-AdminPageCategory.getInitialProps = ({store, query}) => {
-    store.dispatch(listCategory());
+AdminProductCategory.getInitialProps = ({store, query}) => {
+    store.dispatch(listProductCategory());
     return {data: []}
 }
 
-export default AdminPageCategory;
+export default AdminProductCategory;

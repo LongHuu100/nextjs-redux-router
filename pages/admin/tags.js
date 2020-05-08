@@ -1,4 +1,4 @@
-import Helmet from 'react-helmet'
+import { Helmet } from 'react-helmet'
 import {
     Row, Breadcrumb, Tag, Input,
     Select, Button, Form, Table, Popconfirm

@@ -1,4 +1,4 @@
-import Helmet from 'react-helmet'
+import { Helmet } from 'react-helmet'
 import { Row, Breadcrumb } from 'antd'
 import TagsForm from 'containers/tags.form'
 import Link from 'next/link'

@@ -5,6 +5,7 @@ import { api, SUCCESS } from 'config'
 export const GET_DATA_INIT = Symbol('GET_DATA_INIT')
 export const GET_PAGE_VIEW = Symbol('GET_PAGE_VIEW')
 export const GET_ALL_CATEGORY_SUCCESS = Symbol('GET_ALL_CATEGORY_SUCCESS')
+export const GET_PRODUCT_CATEGORY_SUCCESS = Symbol('GET_PRODUCT_CATEGORY_SUCCESS')
 
 export function listCategory () {
     return dispatch => {
@@ -12,6 +13,17 @@ export function listCategory () {
         return post(api.page_cate_list, null).then(res => {
             if(res.errorCode == SUCCESS) {
                 dispatch({ type: GET_ALL_CATEGORY_SUCCESS, payload: res.data })
+            }
+        })
+    }
+}
+
+export function listProductCategory () {
+    return dispatch => {
+        dispatch({type: GET_DATA_INIT})
+        return post(api.product_cate_list, null).then(res => {
+            if(res.errorCode == SUCCESS) {
+                dispatch({ type: GET_PRODUCT_CATEGORY_SUCCESS, payload: res.data })
             }
         })
     }

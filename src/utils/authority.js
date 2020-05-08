@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { CONFIG_MESSAGE, configRoute } from 'actions/config'
+import { CONFIG_MESSAGE } from 'actions/config'
 import { findRoute } from 'utils/index'
 import { useDispatch, useSelector } from 'react-redux'
 import { notification } from 'antd';
@@ -35,8 +35,6 @@ const Authority = (props) => {
 
             const redirectUrl = state && state.redirectUrl ? state.redirectUrl : '/';
             const currentRoute = findRoute(pathname);
-            dispatch( configRoute(currentRoute) );
-
             const user = config.get('user');
             if (currentRoute && currentRoute.is_auth_require === true && user === null) {
                 router.push({

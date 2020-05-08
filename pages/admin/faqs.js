@@ -1,4 +1,4 @@
-import Helmet from 'react-helmet'
+import { Helmet } from 'react-helmet'
 import {
     Row, Breadcrumb, Tag, Input,
     Select, Button, Form, Table, Popconfirm
@@ -67,18 +67,18 @@ const AdminFaqs = props => {
     ];
 
     useEffect(() => {
-        ( async () => {
-            let listInsideFaqs = null;
-            if(catagorys == null) {
-                const cates = await fetch(api.page_mix_cate);
+        let listInsideFaqs = null;
+        if(catagorys == null) {
+            fetch(api.page_mix_cate).then(cates => {
                 if(cates.errorCode === SUCCESS) {
                     setCatagorys(cates.data);
                     listInsideFaqs = cates.data;
                 }
-            } else {
-                listInsideFaqs = catagorys;
-            }
-            const listFaqs = await post(api.faqs_list, filter);
+            }).catch(ee => {})
+        } else {
+            listInsideFaqs = catagorys;
+        }
+        post(api.faqs_list, filter).then(listFaqs => {
             if(listFaqs.errorCode === SUCCESS){
                 let datas = listFaqs.data.embedded;
                 datas.map(it => {
@@ -87,7 +87,7 @@ const AdminFaqs = props => {
                 })
                 setData(datas);
             }
-        })()
+        }).catch(ee => {});
     }, [filter])
 
     return (

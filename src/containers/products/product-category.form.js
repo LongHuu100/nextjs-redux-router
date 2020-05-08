@@ -7,21 +7,27 @@ import { useDispatch } from 'react-redux'
 import { message } from 'actions/config'
 const { Option } = Select;
 
-const PageCategoryForm = props => {
+const ProductCategoryForm = props => {
 
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
+    const [listCategory, setListCategory] = useState('');
     const [form] = Form.useForm();
-    const pageCategory = props.pageCategory;
+    const productCategory = props.productCategory;
 
     useEffect( () => {
-        form.setFieldsValue(pageCategory);
-    },[pageCategory]);
+        form.setFieldsValue(productCategory);
+        if(props.listCategory.length > 0) {
+            setListCategory(props.listCategory.map(item => {
+                return <Option key={item.id} value={item.id}>{item.name}</Option>
+            }))
+        }
+    },[productCategory]);
 
     const handleOk = (value) => {
         setLoading(true);
         setTimeout(async () => {
-            const createOrUpdate = post(value.id !== undefined ? api.page_cate_update : api.page_cate_create, value);
+            const createOrUpdate = post(value.id !== undefined ? api.product_cate_update : api.product_cate_create, value);
             createOrUpdate.then(res => {
                 dispatch(message({type:'success', message: res.message}))
                 props.getCategory()
@@ -38,9 +44,8 @@ const PageCategoryForm = props => {
     };
 
     return <>
-        <Modal
-            visible={props.visible} forceRender
-            title={pageCategory.name !== undefined ? pageCategory.name : 'Tạo mới danh mục'}
+        <Modal forceRender visible={props.visible}
+            title={productCategory.id != null ? productCategory.name : 'Tạo mới danh mục'}
             onOk={handleOk} footer="" onCancel={handleCancel} >
             <Form form={form} name="horizontal_login" layout="vertical" onFinish={handleOk}>
                 <Form.Item name="name" rules={[{ required: true, message: 'Vui lòng nhập tên!' }]} >
@@ -52,20 +57,26 @@ const PageCategoryForm = props => {
                 <Form.Item name="desc">
                     <Input.TextArea placeholder="Mô tả" />
                 </Form.Item>
-                <Form.Item name="id" label="Danh mục" rules={[{ required: true }]}>
+                <Form.Item name="parent_id" label="Danh mục">
                     <Select
+                        value={productCategory.parentId || 0}
                         placeholder="Chọn danh mục"
                         allowClear>
-                        { props.listCategory.length > 0 &&
-                            props.listCategory.map(item => {
-                                return <Option key={item.id} value={item.id}>{item.name}</Option>
-                            })
-                        }
+                        {listCategory}
+                    </Select>
+                </Form.Item>
+                <Form.Item name="status" label="Trạng thái">
+                    <Select
+                        placeholder="- Chọn trạng thái"
+                        value={productCategory.status || 0}
+                        allowClear>
+                        <Option value={0}>Ngưng</Option>
+                        <Option value={1}>Kích hoạt</Option>
                     </Select>
                 </Form.Item>
                 <Form.Item>
                     <Button loading={loading} type="primary" htmlType="submit">
-                        {pageCategory.id == null ? 'Tạo mới' : 'Cập nhật'}
+                        {productCategory.id == null ? 'Tạo mới' : 'Cập nhật'}
                     </Button>
                 </Form.Item>
             </Form>
@@ -73,18 +84,18 @@ const PageCategoryForm = props => {
     </>
 }
 
-PageCategoryForm.propTypes ={
+ProductCategoryForm.propTypes ={
     visible: PropTypes.bool,
     setVisible: PropTypes.func.isRequired,
     getCategory: PropTypes.func.isRequired,
-    pageCategory: PropTypes.object,
+    productCategory: PropTypes.object,
     listCategory: PropTypes.array.isRequired
 }
 
-PageCategoryForm.defaultProps = {
+ProductCategoryForm.defaultProps = {
     visible: false,
-    pageCategory: {},
+    productCategory: {},
     listCategory:[]
 }
 
-export default PageCategoryForm;
+export default ProductCategoryForm;

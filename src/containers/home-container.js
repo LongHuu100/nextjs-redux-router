@@ -1,5 +1,5 @@
 import React from 'react'
-import Helmet from 'react-helmet'
+import { Helmet } from 'react-helmet'
 
 const HomeContainer = (props) => {
     const title = 'm2viet chia sẽ thông tin mới nhất về mobile monney'

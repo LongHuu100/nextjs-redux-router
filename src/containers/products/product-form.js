@@ -9,7 +9,7 @@ import { useDispatch } from 'react-redux'
 import { message } from 'actions/config'
 import axios from 'axios'
 
-import Tags from './tags'
+import Tags from 'containers/page/tags'
 const { Dragger } = Upload;
 const { Option } = Select;
 
@@ -23,14 +23,14 @@ const getIdOfTags = (listTags) => {
     return JSON.stringify(ids);
 }
 
-const PageForm =  props => {
+const ProductForm =  props => {
 
     const infoUploads = {
         sessionId: Math.floor(Date.now() / 1000),
-        id: props.page.id !== undefined ? props.page.id: 0
+        id: props.product.id !== undefined ? props.product.id: 0
     };
 
-    const [page] = useState(props.page);
+    const [product] = useState(props.product);
     const [listImage, setListImage] = useState([]);
     const [listTags, setListTags] = useState([]);
     const [form] = Form.useForm();
@@ -40,11 +40,11 @@ const PageForm =  props => {
     const dispatch = useDispatch();
     const onFinish = values => {
         const data = {
-            ...values, id: page.id,
+            ...values, id: product.id,
             content: content,
             tags: getIdOfTags(listTags)
         }
-        post(props.mode == 'update' ? api.page_update : api.page_create, data).then(res => {
+        post(props.mode == 'update' ? api.product_update : api.product_create, data).then(res => {
             if(res.errorCode === SUCCESS) {
                 dispatch(message({type:'success', message: res.message}))
             }
@@ -59,16 +59,12 @@ const PageForm =  props => {
     })
 
     useEffect(() => {
-        console.log('listTags -->', listTags)
-    }, [listTags]);
-
-    useEffect(() => {
-        form.setFieldsValue(page);
-        setContent(page.content);
-        if(props.mode == 'update') {
-            setListImage(props.page.pageImage)
+        form.setFieldsValue(product);
+        setContent(product.content);
+        if(props.mode == 'edit') {
+            setListImage(product.productImage)
         }
-        fetch(api.page_mix_cate).then(res => {
+        fetch(api.product_cate_list).then(res => {
             if(res.errorCode === SUCCESS) {
                 if(res.data.length > 0)
                 setListCategory(res.data.map(item => {
@@ -102,11 +98,11 @@ const PageForm =  props => {
                 dispatch(message({type:'error', message: `${err.message} file upload failed.`}))
             })
         },
-        action: gateway + '/page/uploads?sessionId=' + infoUploads.sessionId + '&id=' + infoUploads.id
+        action: gateway + '/product/uploads?sessionId=' + infoUploads.sessionId + '&id=' + infoUploads.id
     };
 
     const removeImage = useCallback( (image) => {
-        fetch(api.page_delete_image, {id:image.id}).then(res => {
+        fetch(api.product_delete_image, {id:image.id}).then(res => {
             let tmp = listImage.filter(item => {
                 return item.id !== image.id;
             });
@@ -116,7 +112,7 @@ const PageForm =  props => {
     });
 
     const updateSliderOrRepresent = useCallback( (item, type) => {
-        post(api.page_slider_represent + '?type=' + type, item).then(res => {
+        post(api.product_slider_represent + '?type=' + type, item).then(res => {
             let tmp = listImage.map(tmi => {
                 if(tmi.id === item.id) {
                     if(type === 'pepresent' && res.errorCode === SUCCESS) {
@@ -186,8 +182,7 @@ const PageForm =  props => {
                     </Form.Item>
                     <Form.Item name="categoryId" label="Danh mục" rules={[{ required: true }]}>
                         <Select
-                            placeholder="Chọn danh mục của tin"
-                            onChange={() => {}}
+                            placeholder="Chọn danh mục"
                             allowClear>
                             {listCategory}
                         </Select>
@@ -195,8 +190,8 @@ const PageForm =  props => {
                     <Tags
                         urlFetch={`${gateway}/${api.page_mix_tag}`}
                         setListTags={setListTags}
-                        data={page.listTags}
-                        value={page.tags != null ? JSON.parse(page.tags) : []} />
+                        data={product.listTags}
+                        value={product.tags != null ? JSON.parse(product.tags) : []} />
                     <Form.Item>
                         <Dragger {...propsUploads} >
                             <p className="ant-upload-drag-icon">
@@ -222,9 +217,9 @@ const PageForm =  props => {
     </>
 }
 
-PageForm.defaultProps = {
-    page: {},
+ProductForm.defaultProps = {
+    product: {},
     mode: 'create'
 }
 
-export default PageForm;
+export default ProductForm;
