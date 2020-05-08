@@ -1,6 +1,5 @@
 import { Row, Col, Input, Upload, Checkbox, Select, Form, Button } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
-import CKEditor from "react-ckeditor-component";
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { InboxOutlined } from '@ant-design/icons'
 import { fetch, post } from 'libs/request'
@@ -8,6 +7,7 @@ import { gateway, api, SUCCESS } from 'config'
 import { useDispatch } from 'react-redux'
 import { message } from 'actions/config'
 import axios from 'axios'
+import dynamic from 'next/dynamic'
 
 import Tags from './tags'
 const { Dragger } = Upload;
@@ -22,6 +22,10 @@ const getIdOfTags = (listTags) => {
     });
     return JSON.stringify(ids);
 }
+
+const EditorClient = dynamic(() => import("components/editor"), {
+    ssr: false
+});
 
 const PageForm =  props => {
 
@@ -137,9 +141,9 @@ const PageForm =  props => {
     const memoListImage = useMemo( () => {
         if(!listImage || listImage.length <= 0)
             return null;
-        return listImage.map(it => {
+        return listImage.map( (it, index) => {
             return (
-                <Row key={it.id} style={{borderBottom: '1px solid #ccc', marginTop:5}}>
+                <Row key={it.id} style={{borderBottom: '1px solid #ccc', marginTop: index == 0 ? 0 : 5}}>
                     <Col key={it.id} style={{height:70}} flex="100px">
                         <img style={{width:70, height:70}} src={it.fileName}/>
                     </Col>
@@ -154,17 +158,6 @@ const PageForm =  props => {
             );
         })
     }, [listImage]);
-
-    const memoCkeditor = useMemo(() => {
-        return <CKEditor
-            config= {{ language: 'vn',height:500 }}
-            activeClass="p10"
-            content={content}
-            events={{
-                "change": callbackContent
-            }}
-        />
-    }, [content]);
 
     return <>
         <Form form={form} name="horizontal_login" layout="vertical" onFinish={onFinish}>
@@ -204,7 +197,7 @@ const PageForm =  props => {
                             </p>
                             <p className="ant-upload-text">Click or drag file to this area to upload</p>
                         </Dragger>
-                        <div style={{maxHeight:400,overflow: 'auto'}}>
+                        <div style={{maxHeight:400,overflow: 'auto', border: '1px dashed #ccc', marginTop: 10}}>
                             {memoListImage}
                         </div>
                     </Form.Item>
@@ -215,7 +208,7 @@ const PageForm =  props => {
                     </Form.Item>
                 </Col>
                 <Col style={{ padding: 8 }} span={14}>
-                    {memoCkeditor}
+                    <EditorClient setContent={setContent} content={content}/>
                 </Col>
             </Row>
         </Form>

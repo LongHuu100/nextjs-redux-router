@@ -6,8 +6,8 @@ import Authority from 'utils/authority'
 import { withRouter } from 'next/router'
 
 import 'antd/dist/antd.css'
-import 'assets/css/app.css'
-import 'assets/css/style.css'
+import '../public/css/app.css'
+import '../public/css/style.css'
 
 class RunApp extends App {
 

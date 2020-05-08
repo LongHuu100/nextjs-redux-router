@@ -586,7 +586,9 @@ ul.ht-breadcrumb > li:after {
     font-weight: bold;
     font-size: 14px;
 }
-
+.ck-editor__editable_inline{
+    min-height: 400px;
+}
 /* Mobile */
 
 @media (max-width: 991px) {

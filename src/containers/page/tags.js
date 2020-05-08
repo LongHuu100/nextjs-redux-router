@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-import { Form, Select, Spin, Tag } from 'antd'
-import { SUCCESS } from '../../config'
+import { Select, Spin } from 'antd'
+import { SUCCESS } from 'config'
 const { Option } = Select;
 
 const createValue = (listIds, listModel) => {
@@ -68,7 +68,7 @@ const Tags =  props => {
             filterOption={false}
             onSearch={fetchUser}
             onChange={handleChange}
-            style={{ width: '100%', marginTop:5, marginBottom:5 }} >
+            style={{ width: '100%', marginTop:8, marginBottom:15 }} >
             {mock.data.map(d => (
                 <Option key={d.value}>{d.label}</Option>
             ))}

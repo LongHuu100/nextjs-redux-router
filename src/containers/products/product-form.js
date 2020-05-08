@@ -1,6 +1,5 @@
-import { Row, Col, Input, Upload, Checkbox, Select, Form, Button } from 'antd';
-import { DeleteOutlined } from '@ant-design/icons';
-import CKEditor from "react-ckeditor-component";
+import { Row, Col, Input, Upload, Checkbox, Select, Form, Button } from 'antd'
+import { DeleteOutlined } from '@ant-design/icons'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { InboxOutlined } from '@ant-design/icons'
 import { fetch, post } from 'libs/request'
@@ -8,6 +7,7 @@ import { gateway, api, SUCCESS } from 'config'
 import { useDispatch } from 'react-redux'
 import { message } from 'actions/config'
 import axios from 'axios'
+import dynamic from 'next/dynamic'
 
 import Tags from 'containers/page/tags'
 const { Dragger } = Upload;
@@ -23,14 +23,18 @@ const getIdOfTags = (listTags) => {
     return JSON.stringify(ids);
 }
 
+const EditorClient = dynamic(() => import("components/editor"), {
+    ssr: false
+});
+
 const ProductForm =  props => {
 
     const infoUploads = {
         sessionId: Math.floor(Date.now() / 1000),
-        id: props.product.id !== undefined ? props.product.id: 0
+        id: props.product !== null ? props.product.id: 0
     };
 
-    const [product] = useState(props.product);
+    const [product] = useState(props.product != null ? props.product : {});
     const [listImage, setListImage] = useState([]);
     const [listTags, setListTags] = useState([]);
     const [form] = Form.useForm();
@@ -52,11 +56,6 @@ const ProductForm =  props => {
             dispatch(message({type:'error', message: error.message}))
         })
     };
-
-    const callbackContent = useCallback(( evt ) => {
-        var newContent = evt.editor.getData();
-        setContent(newContent);
-    })
 
     useEffect(() => {
         form.setFieldsValue(product);
@@ -133,9 +132,9 @@ const ProductForm =  props => {
     const memoListImage = useMemo( () => {
         if(!listImage || listImage.length <= 0)
             return null;
-        return listImage.map(it => {
+        return listImage.map( (it, index) => {
             return (
-                <Row key={it.id} style={{borderBottom: '1px solid #ccc', marginTop:5}}>
+                <Row key={it.id} style={{borderBottom: '1px solid #ccc', marginTop: index == 0 ? 0 : 5}}>
                     <Col key={it.id} style={{height:70}} flex="100px">
                         <img style={{width:70, height:70}} src={it.fileName}/>
                     </Col>
@@ -151,25 +150,15 @@ const ProductForm =  props => {
         })
     }, [listImage]);
 
-    const memoCkeditor = useMemo(() => {
-        return <CKEditor
-            config= {{ language: 'vn',height:500 }}
-            activeClass="p10"
-            content={content}
-            events={{
-                "change": callbackContent
-            }}
-        />
-    }, [content]);
-
     return <>
         <Form form={form} name="horizontal_login" layout="vertical" onFinish={onFinish}>
             <Row justify="space-around">
                 <Col style={{ padding: 8 }} span={10}>
                     <Form.Item
+                        label="Title"
                         name="title"
-                        rules={[{ required: true, message: 'Vui lòng nhập tiêu đề!' }]} >
-                        <Input placeholder="Tiêu đề" />
+                        rules={[{ required: true, message: 'Please enter title!' }]} >
+                        <Input placeholder="Title" />
                     </Form.Item>
                     <Form.Item name="name"
                             rules={[{ required: true, message: 'Vui lòng nhập tên!' }]} >
@@ -187,11 +176,6 @@ const ProductForm =  props => {
                             {listCategory}
                         </Select>
                     </Form.Item>
-                    <Tags
-                        urlFetch={`${gateway}/${api.page_mix_tag}`}
-                        setListTags={setListTags}
-                        data={product.listTags}
-                        value={product.tags != null ? JSON.parse(product.tags) : []} />
                     <Form.Item>
                         <Dragger {...propsUploads} >
                             <p className="ant-upload-drag-icon">
@@ -199,7 +183,7 @@ const ProductForm =  props => {
                             </p>
                             <p className="ant-upload-text">Click or drag file to this area to upload</p>
                         </Dragger>
-                        <div style={{maxHeight:400,overflow: 'auto'}}>
+                        <div style={{maxHeight:400,overflow: 'auto', border: '1px dashed #ccc', marginTop: 10}}>
                             {memoListImage}
                         </div>
                     </Form.Item>
@@ -210,7 +194,12 @@ const ProductForm =  props => {
                     </Form.Item>
                 </Col>
                 <Col style={{ padding: 8 }} span={14}>
-                    {memoCkeditor}
+                    <Tags
+                        urlFetch={`${gateway}/${api.page_mix_tag}`}
+                        setListTags={setListTags}
+                        data={product.listTags != null ? product.listTags : []}
+                        value={product.tags != null ? JSON.parse(product.tags) : []} />
+                    <EditorClient setContent={setContent} content={content}/>
                 </Col>
             </Row>
         </Form>

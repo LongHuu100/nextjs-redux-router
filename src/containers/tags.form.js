@@ -8,10 +8,14 @@ import { gateway, api, SUCCESS } from 'config'
 import { useDispatch } from 'react-redux'
 import { message } from 'actions/config'
 import axios from 'axios'
+import dynamic from 'next/dynamic'
 
 const { Dragger } = Upload;
 const { Option } = Select;
 const sectionId = Math.floor(Date.now() / 1000);
+const EditorClient = dynamic(() => import("components/editor"), {
+    ssr: false
+});
 
 const TagForm =  props => {
 
@@ -40,11 +44,6 @@ const TagForm =  props => {
             dispatch(message({type:'error', message: error.message}))
         })
     };
-
-    const callbackContent = useCallback(( evt ) => {
-        var newContent = evt.editor.getData();
-        setContent(newContent);
-    })
 
     useEffect(() => {
         form.setFieldsValue(tags);
@@ -119,17 +118,6 @@ const TagForm =  props => {
         })
     }, [listImage]);
 
-    const memoCkeditor = useMemo(() => {
-        return <CKEditor
-            config= {{ language: 'vn',height:500 }}
-            activeClass="p10"
-            content={content}
-            events={{
-                "change": callbackContent
-            }}
-        />
-    }, [content]);
-
     return <>
         <Form form={form} name="horizontal_login" layout="vertical" onFinish={onFinish}>
             <Row justify="space-around">
@@ -174,7 +162,7 @@ const TagForm =  props => {
                     </Form.Item>
                 </Col>
                 <Col style={{ padding: 8 }} span={14}>
-                    {memoCkeditor}
+                    <EditorClient setContent={setContent} content={content}/>
                 </Col>
             </Row>
         </Form>
